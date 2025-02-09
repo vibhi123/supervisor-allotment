@@ -48,7 +48,7 @@ const StudentDashboard = () => {
 
     try {
       await axios.put("http://localhost:8000/api/student/profile", formData, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `${token}` },
       });
 
       toast.success("Profile updated successfully!");
