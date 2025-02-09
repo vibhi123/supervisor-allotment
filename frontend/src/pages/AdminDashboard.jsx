@@ -1,51 +1,25 @@
-import { useState } from "react";
-import axios from "axios";
+import React from "react";
+import AddStudent from "./AddStudent";
+import ViewAllStudents from "../components/ViewAllStudents";
 
-const AdminDashboard = () => {
-  const [registrationNumber, setRegistrationNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token");
-
-  const handleAddStudent = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/admin/add-student",
-        { registrationNumber, password },
-        { headers: { Authorization: `${token}` } }
-      );
-      setMessage(res.data.message);
-      setRegistrationNumber("");
-      setPassword("");
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Something went wrong");
-    }
-  };
-
+function AdminDashboard() {
   return (
-    <div className="admin-dashboard">
-      <h2>Add New Student</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleAddStudent}>
-        <input
-          type="text"
-          placeholder="Registration Number"
-          value={registrationNumber}
-          onChange={(e) => setRegistrationNumber(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Temporary Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Add Student</button>
-      </form>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800">Admin Dashboard</h2>
+
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1 bg-white shadow-md rounded-lg p-6">
+          <h3 className="text-xl font-semibold mb-4 text-gray-700">All Students</h3>
+          <ViewAllStudents />
+        </div>
+
+        <div className="w-full md:w-1/3 bg-white shadow-md rounded-lg p-6 self-start">
+          <h3 className="text-xl font-semibold mb-4 text-gray-700 text-center">Add New Student</h3>
+          <AddStudent />
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default AdminDashboard;

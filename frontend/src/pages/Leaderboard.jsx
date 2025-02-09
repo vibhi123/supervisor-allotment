@@ -29,31 +29,33 @@ const Leaderboard = () => {
     }
   }, [navigate, token]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="text-center text-gray-700 mt-5">Loading...</p>;
 
   return (
-    <div className="leaderboard">
-      <h2>Leaderboard</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Full Name</th>
-            <th>Department</th>
-            <th>CPI</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, index) => (
-            <tr key={student._id}>
-              <td>{index + 1}</td>
-              <td>{student.fullName}</td>
-              <td>{student.department}</td>
-              <td>{student.cpi.toFixed(2)}</td>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Leaderboard</h2>
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-blue-500 text-white">
+              <th className="py-2 px-4 border">Rank</th>
+              <th className="py-2 px-4 border">Full Name</th>
+              <th className="py-2 px-4 border">Department</th>
+              <th className="py-2 px-4 border">CPI</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {students.map((student, index) => (
+              <tr key={student._id} className="text-center hover:bg-gray-100">
+                <td className="py-2 px-4 border">{index + 1}</td>
+                <td className="py-2 px-4 border">{student.fullName}</td>
+                <td className="py-2 px-4 border">{student.department}</td>
+                <td className="py-2 px-4 border">{student.cpi.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

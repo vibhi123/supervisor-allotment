@@ -58,16 +58,32 @@ router.get("/profile", authMiddleware, async (req, res) => {
 
 router.put("/profile", authMiddleware, async (req, res) => {
   try {
-    const { fullName, department, cpi } = req.body;
+    const {
+      fullName,
+      branch,
+      cpi,
+      dateOfBirth,
+      gateScore,
+      interest,
+      gender,
+      areaOfResearch,
+    } = req.body;
+
     const user = await User.findById(req.user.id);
 
     if (!user || user.role !== "student") {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    user.fullName = fullName;
-    user.department = department;
-    user.cpi = cpi;
+    // Update user fields
+    user.fullName = fullName || user.fullName;
+    user.branch = branch || user.branch;
+    user.cpi = cpi !== undefined ? parseFloat(cpi) : user.cpi;
+    user.dateOfBirth = dateOfBirth || user.dateOfBirth;
+    user.gateScore = gateScore !== undefined ? parseInt(gateScore) : user.gateScore;
+    user.interest = interest || user.interest;
+    user.gender = gender || user.gender;
+    user.areaOfResearch = Array.isArray(areaOfResearch) ? areaOfResearch : user.areaOfResearch;
     user.filledDetails = true;
 
     await user.save();
@@ -76,6 +92,7 @@ router.put("/profile", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 export default router;
