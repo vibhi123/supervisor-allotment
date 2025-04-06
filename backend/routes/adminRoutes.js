@@ -13,7 +13,8 @@ router.get("/students", async (req, res) => {
     
     const students = await User.find({ role: "student" })
     .select("-password")
-    .sort({ registrationNumber: 1 });
+    // .sort({ registrationNumber: 1 });
+    .sort({ cpi: -1, gateScore: -1 });
     
     // console.log(students);
     res.status(200).json(students);
@@ -56,25 +57,50 @@ router.post("/add-student", async (req, res) => {
   }
 });
 
-router.post("/verify-student", async(req, res) => {
+router.put("/verify/:regNo", async (req, res) => {
   try {
-    if(req.user.role != "admin") {
-      throw new Error("Unauthorised!");
-    }
+    // Uncomment this if you want to restrict to admin users
+    // if (req.user.role !== "admin") {
+    //   return res.status(403).json({ message: "Unauthorized" });
+    // }
 
-    const regNo = req.body.regNo;
-    const student = await User.findOne({
-      registrationNumber : regNo,
-    });
-
-    if(!student) {
-      throw new Error("Reg No. not found");
+    const regNo = req.params.regNo;
+    const student = await User.findOne({ registrationNumber: regNo });
+    if (!student) {
+      return res.status(404).json({ message: "Registration number not found" });
     }
 
     student.isVerified = true;
+    await student.save();
+
+    res.json({ message: "Student verified successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message});
+    console.error("Error verifying student:", error);
+    res.status(500).json({ message: error.message });
   }
-})
+});
+
+router.put("/reject/:regNo", async (req, res) => {
+  try {
+    // Uncomment this if you want to restrict to admin users
+    // if (req.user.role !== "admin") {
+    //   return res.status(403).json({ message: "Unauthorized" });
+    // }
+
+    const regNo = req.params.regNo;
+    const student = await User.findOne({ registrationNumber: regNo });
+    if (!student) {
+      return res.status(404).json({ message: "Registration number not found" });
+    }
+
+    student.filledDetails = false;
+    await student.save();
+
+    res.json({ message: "Student verified successfully" });
+  } catch (error) {
+    console.error("Error verifying student:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 export default router;

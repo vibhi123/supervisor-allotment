@@ -29,7 +29,7 @@ const StudentProfile = () => {
   const handleVerify = async () => {
     try {
       await axios.put(
-        `http://localhost:8000/api/admin/student/${regNo}/verify`,
+        `http://localhost:8000/api/admin/verify/${regNo}`,
         {},
         { headers: { Authorization: `${token}` } }
       );
@@ -44,7 +44,7 @@ const StudentProfile = () => {
     if (!window.confirm("Are you sure you want to reject this student? This action is irreversible.")) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/admin/student/${regNo}`, {
+      await axios.put(`http://localhost:8000/api/admin/reject/${regNo}`, {
         headers: { Authorization: `${token}` },
       });
       toast.success("Student rejected successfully!");

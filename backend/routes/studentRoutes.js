@@ -69,7 +69,7 @@ router.get("/profile/:regNo", async (req, res) => {
 });
 
 router.put("/profile", async (req, res) => {
-  console.log("hehe");
+  // console.log("hehe");
   try {
     const {
       fullName,
@@ -97,10 +97,9 @@ router.put("/profile", async (req, res) => {
     user.interest = interest || user.interest;
     user.gender = gender || user.gender;
     user.areaOfResearch = Array.isArray(areaOfResearch) ? areaOfResearch : user.areaOfResearch;
-    user.filledDetails = false;
     user.filledDetails = true;
     user.facultyPreferences = [];
-    
+
     await user.save();
     res.json({ message: "Profile updated successfully" });
   } catch (err) {
