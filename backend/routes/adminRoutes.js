@@ -2,6 +2,7 @@ import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs"
+import Faculty from "../models/Faculty.Model.js";
 
 const router = express.Router();
 
@@ -125,6 +126,59 @@ router.get("/update-rank", async (req, res) => {
     } catch (err) {
       console.error("Error ranking students:", err);
     }
+});
+
+router.get("/allot-faculty", async (req, res) => {
+  try {
+    const faculties = await Faculty.find({});
+    const facultyMap = new Map();
+    faculties.forEach(faculty => {
+      faculty.student = faculty.student || [];
+      facultyMap.set(faculty._id.toString(), faculty);
+    });
+
+    const students = await User.find({role: "student", filledPreferences: true}).sort({ rank: 1 });
+
+    for (const student of students) {
+      for (const prefId of student.facultyPreferences) {
+        const faculty = facultyMap.get(prefId.toString());
+
+        if (
+          faculty &&
+          faculty.student.length < faculty.numberOfStudent
+        ) {
+          // Assign student to faculty
+          student.supervisor = faculty._id;
+          await student.save();
+
+          // Update faculty's list
+          faculty.student.push(student._id);
+          break; // move to next student
+        }
+      }
+    }
+
+    // Save all faculties
+    for (const faculty of facultyMap.values()) {
+      await faculty.save();
+    }
+
+    console.log('Allotment completed.');
+  } catch (error) {
+    console.error('Error during allotment:', error);
+  }
+});
+
+router.get('/allotment', async (req, res) => {
+  try {
+    const students = await User.find({})
+      .sort({ rank: 1 })
+      .populate('supervisor', 'fullName');
+
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching data.' });
+  }
 });
 
 export default router;

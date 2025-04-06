@@ -14,6 +14,7 @@ import ViewAllStudents from "./components/ViewAllStudents";
 import FacultyForm from "./pages/FacultyForm";
 import FacultyList from "./pages/FacultyList";
 import EditFaculty from "./pages/EditFaculty";
+import AllotmentPage from "./pages/AllotmentPage";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Route path="/admin/add-faculty" element={<FacultyForm />} />;
       <Route path="/admin/view-all-faculty" element={<FacultyList />} />;
       <Route path="/admin/edit-faculty/:id" element={<EditFaculty />} />;
+      <Route path="/admin/allot" element={<AllotmentPage />} />
     </Routes>
   );
 }
