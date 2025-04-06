@@ -111,14 +111,14 @@ router.put("/preferences", async (req, res) => {
   try {
     const studentId = req.user.id;
     const { facultyPreferences } = req.body;
-    console.log(facultyPreferences);
-    console.log(studentId);
+    // console.log(facultyPreferences);
+    // console.log(studentId);
     
     const student = await User.findByIdAndUpdate(
       studentId,
       {
         facultyPreferences,
-        filledPreference: true,
+        filledPreferences: true,
       },
       { new: true }
     );

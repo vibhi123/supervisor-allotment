@@ -26,7 +26,7 @@ function App() {
       <Route path="/complete-profile" element={<CompleteProfile />} />
       <Route path="/dashboard/student" element={<StudentDashboard />} />
       <Route path="/supervisor-preference" element={<ProfessorSelection />} />;
-      <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="/ranklist" element={<Leaderboard />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />;
       <Route path="/admin/view-students" element={<ViewAllStudents />} />;
       <Route path="/admin/view-student/:regNo" element={<StudentProfile />} />;

@@ -11,7 +11,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/student/ranklist", {
+        const res = await axios.get("http://localhost:8000/api/admin/update-rank", {
           headers: { Authorization: `${token}` },
         });
         setStudents(res.data);
@@ -34,14 +34,14 @@ const Leaderboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Leaderboard</h2>
+        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Rank List</h2>
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-blue-500 text-white">
               <th className="py-2 px-4 border">Rank</th>
               <th className="py-2 px-4 border">Full Name</th>
-              <th className="py-2 px-4 border">Department</th>
               <th className="py-2 px-4 border">CPI</th>
+              <th className="py-2 px-4 border">GATE Score</th>
             </tr>
           </thead>
           <tbody>
@@ -49,8 +49,8 @@ const Leaderboard = () => {
               <tr key={student._id} className="text-center hover:bg-gray-100">
                 <td className="py-2 px-4 border">{index + 1}</td>
                 <td className="py-2 px-4 border">{student.fullName}</td>
-                <td className="py-2 px-4 border">{student.department}</td>
                 <td className="py-2 px-4 border">{student.cpi.toFixed(2)}</td>
+                <td className="py-2 px-4 border">{student.gateScore}</td>
               </tr>
             ))}
           </tbody>

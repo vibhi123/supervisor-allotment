@@ -103,21 +103,23 @@ const StudentProfile = () => {
               )}
               <p className="text-xl font-semibold text-gray-800">{student.fullName}</p>
               <p className="text-gray-600">{student.branch}</p>
-              <p className="text-sm text-gray-500">{student.gender}</p>
             </div>
   
             <div className="space-y-2 text-gray-700">
               <p><span className="font-medium">CPI:</span> {student.cpi}</p>
               <p><span className="font-medium">GATE Score:</span> {student.gateScore}</p>
               <p><span className="font-medium">Interest:</span> {student.interest}</p>
+              <p><span className="font-medium">Gender:</span> {student.gender}</p>
               <p>
                 <span className="font-medium">Date of Birth:</span>{" "}
                 {new Date(student.dateOfBirth).toLocaleDateString()}
               </p>
-              <p>
-                <span className="font-medium">Research Areas:</span>{" "}
-                {student.areaOfResearch.join(", ")}
-              </p>
+              {student.interest === "Research" && (
+                <p>
+                  <span className="font-medium">Research Areas:</span>{" "}
+                  {student.areaOfResearch.join(", ")}
+                </p>
+              )}
               <p>
                 <span className="font-medium">Status:</span>{" "}
                 <span

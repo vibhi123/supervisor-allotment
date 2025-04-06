@@ -82,7 +82,6 @@ router.put("/verify/:regNo", async (req, res) => {
 
 router.put("/reject/:regNo", async (req, res) => {
   try {
-    // Uncomment this if you want to restrict to admin users
     // if (req.user.role !== "admin") {
     //   return res.status(403).json({ message: "Unauthorized" });
     // }
@@ -94,6 +93,7 @@ router.put("/reject/:regNo", async (req, res) => {
     }
 
     student.filledDetails = false;
+    student.filledPreferences = false;
     await student.save();
 
     res.json({ message: "Student verified successfully" });
@@ -101,6 +101,30 @@ router.put("/reject/:regNo", async (req, res) => {
     console.error("Error verifying student:", error);
     res.status(500).json({ message: error.message });
   }
+});
+
+router.get("/update-rank", async (req, res) => {
+    try {
+      const students = await User.find({role: "student"});
+
+      students.sort((a, b) => {
+        if (b.cpi !== a.cpi) return b.cpi - a.cpi;
+        if (b.gateScore !== a.gateScore) return b.gateScore - a.gateScore;
+        return new Date(b.dob) - new Date(a.dob);
+      });
+      // console.log(students);
+
+      // Assign ranks
+      // for (let i = 0; i < students.length; i++) {
+      //   students[i].rank = i + 1;
+      //   await students[i].save(); // Save updated rank
+      // }
+
+      res.status(200).json(students);
+      // console.log("Ranking updated successfully.");
+    } catch (err) {
+      console.error("Error ranking students:", err);
+    }
 });
 
 export default router;

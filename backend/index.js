@@ -7,6 +7,7 @@ import studentRoutes from './routes/studentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import authMiddleware from './middleware/authMiddleware.js';
+import User from './models/User.js';
 
 
 // App config
@@ -30,3 +31,13 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log("Listening to port : " + port)
 })
+
+// app.get('/api/users/tmp', async (req, res) => {
+//     try {
+//       const result = await User.updateMany({}, { $set: { rank: 0, supervisor: null } });
+//       res.json({ message: 'All users updated', modifiedCount: result.modifiedCount });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Server error' });
+//     }
+//   });

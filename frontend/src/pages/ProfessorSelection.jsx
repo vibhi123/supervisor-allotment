@@ -28,7 +28,7 @@ const ProfessorSelection = () => {
         setLoading(false);
   
         if (userRes.data.filledPreference) {
-          navigate("/leaderboard");
+          navigate("/ranklist");
         }
       } catch (err) {
         console.error(err);
@@ -64,7 +64,7 @@ const ProfessorSelection = () => {
         { headers: { Authorization: `${token}` } }
       );
       toast.success("Preferences submitted successfully!");
-      navigate("/leaderboard");
+      navigate("/ranklist");
     } catch (err) {
       console.error(err);
       toast.error("Failed to submit preferences");
