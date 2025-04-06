@@ -22,6 +22,19 @@ router.get("/showAll", async (req, res) => {
     }
 });
 
+router.get("/name/:id", async (req, res) => {
+    try {
+        // console.log(req.params.id);
+        const faculty = await Faculty.findById(req.params.id)
+        .select("fullName");
+        if (!faculty) return res.status(404).json({ message: "Faculty not found" });
+        res.status(200).json(faculty);
+    } catch (error) {
+        console.error("Error fetching faculty:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 router.get("/:id", async (req, res) => {
     try {
         const faculty = await Faculty.findById(req.params.id);
