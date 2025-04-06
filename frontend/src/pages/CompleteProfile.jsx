@@ -13,8 +13,7 @@ const CompleteProfile = () => {
     gateScore: "",
     interest: "",
     gender: "",
-    areaOfResearch: [],
-    photo: null,
+    areaOfResearch: []
   });
 
   const [loading, setLoading] = useState(true);
@@ -29,9 +28,9 @@ const CompleteProfile = () => {
         });
         setUser(res.data);
         setLoading(false);
-
+        console.log(res.data);
         if (res.data.filledDetails) {
-          navigate("/leaderboard");
+          navigate("/supervisor-preference");
         }
       } catch (err) {
         toast.error("Failed to fetch user data");
@@ -58,36 +57,28 @@ const CompleteProfile = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, photo: e.target.files[0] });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedFormData = new FormData();
-
-    Object.keys(formData).forEach((key) => {
-      if (key === "areaOfResearch") {
-        updatedFormData.append(key, JSON.stringify(formData[key]));
-      } else {
-        updatedFormData.append(key, formData[key]);
-      }
-    });
-
+  
     try {
-      await axios.put("http://localhost:8000/api/student/profile", updatedFormData, {
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
+      await axios.put(
+        "http://localhost:8000/api/student/profile",
+        formData,
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
       toast.success("Profile updated successfully!");
-      navigate("/leaderboard");
+      navigate("/supervisor-preference");
     } catch (err) {
       toast.error("Profile update failed");
     }
   };
+  
 
   if (loading) return <p>Loading...</p>;
 

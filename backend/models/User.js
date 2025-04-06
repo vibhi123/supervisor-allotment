@@ -9,12 +9,18 @@ const userSchema = new mongoose.Schema({
   branch: { type: String },
   cpi: { type: Number, default: 0 },
   filledDetails: { type: Boolean, default: false },
+  filledPreferences: { type: Boolean, default: false },
+  facultyPreferences: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Faculty"
+}],
   dateOfBirth: { type: Date },
   gateScore: { type: Number, min: 0, max: 1000 },
   interest: { type: String, enum: ["Research", "Internship"] },
   gender: { type: String, enum: ["Male", "Female"] },
   areaOfResearch: [{ type: String }],
   photo: { type: String },
+  isVerified: { type: Boolean, default: false }
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

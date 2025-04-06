@@ -4,7 +4,7 @@ import User from '../models/User.js'
 
 const router = express.Router();
 
-router.put("/complete-profile", authMiddleware, async (req, res) => {
+router.put("/complete-profile", async (req, res) => {
   const { fullName, department, cpi } = req.body;
   const userId = req.user.id;
   
@@ -33,7 +33,7 @@ router.put("/complete-profile", authMiddleware, async (req, res) => {
 });
 
 
-router.get("/leaderboard", authMiddleware, async (req, res) => {
+router.get("/leaderboard", async (req, res) => {
   try {
     const students = await User.find({ role: "student", filledDetails: true })
       .select("fullName department cpi")
@@ -46,7 +46,7 @@ router.get("/leaderboard", authMiddleware, async (req, res) => {
 });
 
 
-router.get("/profile", authMiddleware, async (req, res) => {
+router.get("/profile", async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -56,7 +56,20 @@ router.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-router.put("/profile", authMiddleware, async (req, res) => {
+router.get("/profile/:regNo", async (req, res) => {
+  try {
+    // console.log(req.params);
+    const regNo = req.params.regNo;
+    const user = await User.findOne({registrationNumber : regNo}).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/profile", async (req, res) => {
+  console.log("hehe");
   try {
     const {
       fullName,
@@ -84,8 +97,10 @@ router.put("/profile", authMiddleware, async (req, res) => {
     user.interest = interest || user.interest;
     user.gender = gender || user.gender;
     user.areaOfResearch = Array.isArray(areaOfResearch) ? areaOfResearch : user.areaOfResearch;
+    user.filledDetails = false;
     user.filledDetails = true;
-
+    user.facultyPreferences = [];
+    
     await user.save();
     res.json({ message: "Profile updated successfully" });
   } catch (err) {
@@ -93,6 +108,27 @@ router.put("/profile", authMiddleware, async (req, res) => {
   }
 });
 
+router.put("/preferences", async (req, res) => {
+  try {
+    const studentId = req.user.id;
+    const { facultyPreferences } = req.body;
+    console.log(facultyPreferences);
+    console.log(studentId);
+    
+    const student = await User.findByIdAndUpdate(
+      studentId,
+      {
+        facultyPreferences,
+        filledPreference: true,
+      },
+      { new: true }
+    );
 
+    res.status(200).json({ message: "Preferences updated", student });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;

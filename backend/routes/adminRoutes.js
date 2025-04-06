@@ -5,24 +5,24 @@ import bcrypt from "bcryptjs"
 
 const router = express.Router();
 
-router.get("/students", authMiddleware, async (req, res) => {
+router.get("/students", async (req, res) => {
   try {
-    if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Access denied. Admins only." });
-    }
+    // if (req.user.role !== "admin") {
+    //   return res.status(403).json({ message: "Access denied. Admins only." });
+    // }
     
     const students = await User.find({ role: "student" })
     .select("-password")
     .sort({ registrationNumber: 1 });
     
-    console.log(students);
+    // console.log(students);
     res.status(200).json(students);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
-router.post("/add-student", authMiddleware, async (req, res) => {
+router.post("/add-student", async (req, res) => {
   try {
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied" });
@@ -56,5 +56,25 @@ router.post("/add-student", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/verify-student", async(req, res) => {
+  try {
+    if(req.user.role != "admin") {
+      throw new Error("Unauthorised!");
+    }
+
+    const regNo = req.body.regNo;
+    const student = await User.findOne({
+      registrationNumber : regNo,
+    });
+
+    if(!student) {
+      throw new Error("Reg No. not found");
+    }
+
+    student.isVerified = true;
+  } catch (error) {
+    res.status(500).json({ message: error.message});
+  }
+})
 
 export default router;

@@ -11,7 +11,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/student/leaderboard", {
+        const res = await axios.get("http://localhost:8000/api/student/ranklist", {
           headers: { Authorization: `${token}` },
         });
         setStudents(res.data);

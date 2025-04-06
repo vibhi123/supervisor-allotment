@@ -32,19 +32,15 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/register", async (req, res) => {
-    const { registrationNumber, email, password, role, fullName, department, cpi } = req.body;
+    const { registrationNumber, password } = req.body;
   
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-  
+      
       const newUser = new User({
         registrationNumber,
-        email,
         password: hashedPassword,
-        role,
-        fullName,
-        department,
-        cpi,
+        role: "student",
         filledDetails: false,
       });
   
