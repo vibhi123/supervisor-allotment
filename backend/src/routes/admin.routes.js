@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addAdmin, addFaculty, addStudent, allotFacultyMCA, allotFacultyMTech, changeCurrentPassword, createTeamsMCA, generateRankMCA, generateRankMTech, getAllFaculty, getAllMCATeams, getCurrentAdmin, getFaculty, getMCATeam, getStudentProfile, loginAdmin, logoutAdmin, refreshAccessToken, registerAdmin, verifyStudent } from "../controllers/admin.controller.js";
+import { addAdmin, addFaculty, addStudent, allotFacultyMCA, allotFacultyMTech, changeCurrentPassword, createTeamsMCA, generateRankMCA, generateRankMTech, getAllFaculty, getAllMCATeams, getCurrentAdmin, getFaculty, getMCATeam, getStudentProfile, loginAdmin, logoutAdmin, refreshAccessToken, registerAdmin, updateFacultyDetails, verifyStudent } from "../controllers/admin.controller.js";
 import { verifyAdminJWT } from "../middlewares/auth.admin.middleware.js";
 
 const router = Router()
@@ -27,6 +27,7 @@ router.route("/teamMCA/:teamNumber").get(verifyAdminJWT, getMCATeam)
 router.route("/addStudent").post(verifyAdminJWT, addStudent)
 router.route("/addFaculty").post(verifyAdminJWT, addFaculty)
 router.route("/addAdmin").post(verifyAdminJWT, addAdmin)
+router.route("/update-faculty/:facultyId").put(verifyAdminJWT, updateFacultyDetails)
 
 // router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 // router.route("/history").get(verifyJWT, getWatchHistory)

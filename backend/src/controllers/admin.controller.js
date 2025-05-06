@@ -684,7 +684,7 @@ const addAdmin = asyncHandler(async (req, res) => {
     const currAdmin = req.user;
 
     if (
-        [email, password, fullName].some((field) => field?.trim() === "")
+        [email, password].some((field) => field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
@@ -719,6 +719,38 @@ const addAdmin = asyncHandler(async (req, res) => {
     )
 })
 
+const updateFacultyDetails = asyncHandler(async (req, res) => {
+    const id = req.params.facultyId;
+    const {
+        designation,
+        numberOfStudent,
+        interest,
+        areaOfResearch
+    } = req.body;
+
+    if (!designation || !numberOfStudent || !interest || !areaOfResearch) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    const faculty = await Faculty.findById(id);
+    if (!faculty) {
+        throw new ApiError(404, "Faculty not found");
+    }
+
+    faculty.designation = designation;
+    faculty.numberOfStudent = numberOfStudent;
+    faculty.interest = interest;
+    faculty.areaOfResearch = Array.isArray(areaOfResearch)
+        ? areaOfResearch
+        : areaOfResearch.split(',').map((item) => item.trim());
+
+    await faculty.save();
+
+    return res.status(200).json(
+        new ApiResponse(200, faculty, "Faculty details updated successfully")
+    );
+});
+
 export {
     registerAdmin,
     loginAdmin,
@@ -739,7 +771,8 @@ export {
     getFaculty,
     addStudent,
     addFaculty,
-    addAdmin
+    addAdmin,
+    updateFacultyDetails
     // getUserChannelProfile,
     // getWatchHistory
 }

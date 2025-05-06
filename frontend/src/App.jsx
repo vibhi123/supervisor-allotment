@@ -20,6 +20,10 @@ import MCAAllStudent from './pages/student/MCAAllStudent';
 import MCARanklist from './pages/student/MCARanklist';
 import MTechAllStudent from './pages/student/MTechAllStudent';
 import MTechRanklist from './pages/student/MTechRanklist';
+import AddStudent from './pages/admin/AddStudent';
+import AddFaculty from './pages/admin/AddFaculty';
+import AddAdmin from './pages/admin/AddAdmin';
+import EditFacultyDetails from './pages/faculty/EditFacultyDetails';
 
 function App() {
 
@@ -34,6 +38,10 @@ function App() {
         <Route path="/admin/verify-mtech" element={ <MTechToVerify /> } />
         <Route path="/admin/verify-mca" element={ <MCAToVerify /> } />
         <Route path="/admin/teams-mca" element={ <MCATeams /> } />
+        <Route path="/admin/add-student" element={ <AddStudent /> } />
+        <Route path="/admin/add-faculty" element={ <AddFaculty /> } />
+        <Route path="/admin/add-admin" element={ <AddAdmin /> } />
+        <Route path="/admin/edit-faculty/:facultyId" element={ <EditFacultyDetails /> } />
         <Route path="/admin/team-mca/:teamNumber" element={ <MCATeam /> } />
         <Route path="/student/:registrationNumber" element={ <StudentProfile /> } />
         <Route path="/mtech/fill-faculty-preference" element={ <MTechPreference /> }/>

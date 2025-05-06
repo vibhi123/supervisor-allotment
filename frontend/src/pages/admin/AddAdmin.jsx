@@ -11,7 +11,7 @@ import {
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
-const AddAdminPage = () => {
+const AddAdmin = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -107,4 +107,4 @@ const AddAdminPage = () => {
   );
 };
 
-export default AddAdminPage;
+export default AddAdmin;

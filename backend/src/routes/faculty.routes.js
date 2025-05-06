@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changeCurrentPassword, getAllFaculty, getCurrentFaculty, loginFaculty, logoutFaculty, refreshAccessToken, registerFaculty } from "../controllers/faculty.controller.js";
+import { changeCurrentPassword, getAllFaculty, getCurrentFaculty, getFaculty, loginFaculty, logoutFaculty, refreshAccessToken, registerFaculty } from "../controllers/faculty.controller.js";
 import { verifyFacultyJWT } from "../middlewares/auth.faculty.middleware.js";
 
 const router = Router()
@@ -8,6 +8,7 @@ router.route("/login").post(loginFaculty)
 router.route("/register").post(registerFaculty)
 
 router.route("/all-faculty").get(getAllFaculty)
+router.route("/:facultyId").get(getFaculty)
 
 //secured routes
 router.route("/refresh-token").post(refreshAccessToken)

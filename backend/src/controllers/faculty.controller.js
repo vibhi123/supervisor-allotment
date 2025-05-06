@@ -261,6 +261,23 @@ const getAllFaculty = asyncHandler(async (req, res) => {
     ));
 });
 
+const getFaculty = asyncHandler(async (req, res) => {
+    const id = req.params.facultyId
+
+    const faculty = await Faculty.findById(id).select("-password -refreshToken");
+
+    if(!faculty) {
+        throw new ApiError(404, "Faculty not found");
+    }
+
+    return res.status(200)
+    .json(new ApiResponse(
+        200,
+        faculty,
+        "Faculty data fetched successfully."
+    ));
+})
+
 export {
     registerFaculty,
     loginFaculty,
@@ -270,6 +287,7 @@ export {
     getCurrentFaculty,
     completeFacultyProfile,
     getAllFaculty,
+    getFaculty
     // getUserChannelProfile,
     // getWatchHistory
 }

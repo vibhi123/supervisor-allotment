@@ -98,7 +98,7 @@ function AuthPage() {
         if (res.data.data.user.role === "Admin") {
           navigate("/admin/dashboard");
         } else if (res.data.data.user.role === "Faculty") {
-          navigate("/dashboard/faculty");
+          navigate("/faculty/dashboard");
         } else if (res.data.data.user.course === "MCA") {
           navigate(`/student/${res.data.data.user.registrationNumber}`);
         } else if (res.data.data.user.course === "M.Tech.") {
