@@ -3,9 +3,9 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, CircularProgress } from '@mui/material';
-import StudentViewCard from '../../components/StudentViewCard';
+import MCARanklistTable from '../../components/MCARanklistTable';
 
-const MTechAllotment = () => {
+const MCAAllStudent = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -13,14 +13,12 @@ const MTechAllotment = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/common/allMTech');
-        // console.log(response);
-        
+        const response = await axios.get('http://localhost:8000/api/v1/common/allMCA');
         setStudents(response.data.data);
-        toast.success('Students loaded successfully!');
+        toast.success('MCA students loaded successfully!');
       } catch (error) {
         console.error(error);
-        toast.error('Failed to load students');
+        toast.error('Failed to load MCA students');
       } finally {
         setLoading(false);
       }
@@ -36,13 +34,13 @@ const MTechAllotment = () => {
   return (
     <Container sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        M.Tech Students
+        MCA Students
       </Typography>
 
       {loading ? (
         <CircularProgress />
       ) : (
-        <StudentViewCard
+        <MCARanklistTable
           students={students}
           loading={loading}
           handleRowClick={handleRowClick}
@@ -52,4 +50,4 @@ const MTechAllotment = () => {
   );
 };
 
-export default MTechAllotment;
+export default MCAAllStudent;

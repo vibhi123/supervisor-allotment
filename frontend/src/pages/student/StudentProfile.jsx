@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { Container, Typography, Paper, CircularProgress, Chip, Box, Avatar, Grid } from '@mui/material';
+import { Container, Typography, Paper, CircularProgress, Chip, Box, Avatar, Grid, Button } from '@mui/material';
 import FacultyPreferencesTable from '../../components/FacultyPreferencesTable';
 import TeamCard from '../../components/TeamCard';
 import { useAuth } from '../../redux/AuthContext';
@@ -51,18 +51,67 @@ const StudentProfilePage = () => {
     <Container sx={{ mt: 5 }}>
       <Grid container spacing={4}>
         <Grid size={6}>
-        <Paper elevation={3} sx={{ p: 4, height: '85%' }}>
+          <Paper elevation={3} sx={{ p: 4, height: '85%' }}>
             <Box display="flex" alignItems="center" flexDirection="column">
               <Avatar src={student.profileImage || '../../assets/defaultProfilePicture.png'} sx={{ width: 120, height: 120, mb: 2 }} />
               <Typography variant="h4" gutterBottom>
                 {student.fullName}
               </Typography>
-              <Chip
-                label={student.isVerified ? 'Verified' : 'Not Verified'}
-                color={student.isVerified ? 'success' : 'error'}
-                variant="outlined"
-                sx={{ mb: 2 }}
-              />
+              {user?.role === "Admin" && !student.isVerified ? (
+                <Box display="flex" gap={2} sx={{ mb: 2 }}>
+                  <Chip
+                    label={student.isVerified ? 'Verified' : 'Not Verified'}
+                    color={student.isVerified ? 'success' : 'error'}
+                    variant="outlined"
+                  />
+                  <Box display="flex" gap={1}>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await axios.put(
+                            `http://localhost:8000/api/v1/admin/verify/${registrationNumber}`,
+                            { isVerified: true },
+                            { withCredentials: true }
+                          );
+                          setStudent((prev) => ({ ...prev, isVerified: true }));
+                          toast.success("Student verified");
+                        } catch (err) {
+                          console.error(err);
+                          toast.error("Verification failed");
+                        }
+                      }}
+                    >
+                      ✅ Verify
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await axios.put(
+                            `http://localhost:8000/api/v1/student/${registrationNumber}/verify`,
+                            { isVerified: false },
+                            { withCredentials: true }
+                          );
+                          setStudent((prev) => ({ ...prev, isVerified: false }));
+                          toast.success("Student marked as not verified");
+                        } catch (err) {
+                          console.error(err);
+                          toast.error("Update failed");
+                        }
+                      }}
+                    >
+                      ❌ Reject
+                    </button>
+                  </Box>
+                </Box>
+              ) : (
+                <Chip
+                  label={student.isVerified ? 'Verified' : 'Not Verified'}
+                  color={student.isVerified ? 'success' : 'error'}
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                />
+              )}
+
             </Box>
             <Box mt={2}>
               <Typography><strong>Registration Number:</strong> {student.registrationNumber}</Typography>

@@ -16,6 +16,10 @@ import AllFaculty from './pages/faculty/AllFaculty';
 import MCAAllotment from './pages/admin/MCAAllotment';
 import AllotmentMCA from './pages/faculty/AllotmentMCA';
 import MTechAllotment from './pages/student/MTechAllotment';
+import MCAAllStudent from './pages/student/MCAAllStudent';
+import MCARanklist from './pages/student/MCARanklist';
+import MTechAllStudent from './pages/student/MTechAllStudent';
+import MTechRanklist from './pages/student/MTechRanklist';
 
 function App() {
 
@@ -26,18 +30,22 @@ function App() {
       <Routes>
         <Route path="/" element={ <AuthPage /> } />
         <Route path="/student/complete-profile" element={ <CompleteProfile /> }/>
-        <Route path="/mtech/fill-faculty-preference" element={ <MTechPreference /> }/>
         <Route path="/admin/dashboard" element={ <AdminDashboard /> } />
         <Route path="/admin/verify-mtech" element={ <MTechToVerify /> } />
         <Route path="/admin/verify-mca" element={ <MCAToVerify /> } />
         <Route path="/admin/teams-mca" element={ <MCATeams /> } />
         <Route path="/admin/team-mca/:teamNumber" element={ <MCATeam /> } />
+        <Route path="/student/:registrationNumber" element={ <StudentProfile /> } />
+        <Route path="/mtech/fill-faculty-preference" element={ <MTechPreference /> }/>
         <Route path="/unauthorized" element={ <UnauthorizedPage /> } />
         <Route path="/faculty-all" element={ <AllFaculty /> } />
+        <Route path="/mca-all" element={ <MCAAllStudent /> } />
         <Route path="/allotment-mca" element={ <AllotmentMCA /> } />
         <Route path="/mca-allotment" element={ <MCAAllotment /> } />
+        <Route path="/mca-ranklist" element={ <MCARanklist /> } />
         <Route path="/mtech-allotment" element={ <MTechAllotment /> } />
-        <Route path="/student/:registrationNumber" element={ <StudentProfile /> } />
+        <Route path="/mtech-all" element={ <MTechAllStudent/> } />
+        <Route path="/mtech-ranklist" element={ <MTechRanklist /> } />
       </Routes>
       </AuthProvider>
       </>

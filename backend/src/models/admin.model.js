@@ -3,6 +3,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const adminSchema = new mongoose.Schema({
+    fullName: {
+        type: String,
+        default: "Admin"
+    },
     email: {
         type: String,
         unique: [true, "email already used."],
@@ -15,6 +19,26 @@ const adminSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "Admin"
+    },
+    MCARankGenerated: {
+        type: Boolean,
+        default: false
+    },
+    MCATeamsCreated: {
+        type: Boolean,
+        default: false
+    },
+    MCAFacultyAllotted: {
+        type: Boolean,
+        default: false
+    },
+    MTechRankGenerated: {
+        type: Boolean,
+        default: false
+    },
+    MTechFacultyAllotted: {
+        type: Boolean,
+        default: false
     },
     refreshToken: {
         type: String

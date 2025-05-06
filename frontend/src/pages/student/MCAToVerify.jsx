@@ -13,9 +13,9 @@ const MCAToVerify = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/common/allMCA');
+        const response = await axios.get('http://localhost:8000/api/v1/common/allMCAVerify');
         setStudents(response.data.data);
-        toast.success('MCA students loaded successfully!');
+        toast.success('Success');
       } catch (error) {
         console.error(error);
         toast.error('Failed to load MCA students');
@@ -34,7 +34,7 @@ const MCAToVerify = () => {
   return (
     <Container sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        MCA Students
+        Verify MCA Students
       </Typography>
 
       {loading ? (

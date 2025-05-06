@@ -56,7 +56,7 @@ const MCAAllotment = () => {
             <TableCell><strong>Member 2</strong></TableCell>
             <TableCell><strong>Member 3</strong></TableCell>
             <TableCell><strong>Member 4</strong></TableCell>
-            <TableCell><strong>Supervisor</strong></TableCell>
+            <TableCell><strong>Faculty</strong></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

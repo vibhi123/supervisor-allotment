@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const FacultyPreferencesTable = ({ preferences }) => {
-  console.log(preferences);
+  // console.log(preferences);
   
   return (
     <TableContainer component={Paper} sx={{ maxHeight: 500, overflowY: 'auto' }}>

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {upload} from "../middlewares/multer.middleware.js"
-import { changeCurrentPassword, completeStudentProfile, getAllMCAStudent, getAllMTechStudent, getCurrentStudent, getStudentProfile, loginStudent, logoutStudent, refreshAccessToken, registerStudent, submitPreferences } from "../controllers/student.controller.js";
+import { changeCurrentPassword, completeStudentProfile, getAllMCAStudent, getAllMCAStudentReg, getAllMTechStudent, getAllMTechStudentReg, getCurrentStudent, getStudentProfile, loginStudent, logoutStudent, refreshAccessToken, registerStudent, submitPreferences } from "../controllers/student.controller.js";
 import { verifyStudentJWT } from "../middlewares/auth.student.middleware.js";
 
 const router = Router()
@@ -17,7 +17,9 @@ router.route("/register").post(
 
 router.route("/login").post(loginStudent)
 router.route("/allMCA").get(getAllMCAStudent)
+router.route("/allMCAReg").get(getAllMCAStudentReg)
 router.route("/allMTech").get(getAllMTechStudent)
+router.route("/allMTechReg").get(getAllMTechStudentReg)
 
 //secured routes
 router.route("/logout").post(verifyStudentJWT,  logoutStudent)

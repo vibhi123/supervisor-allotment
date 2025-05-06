@@ -298,6 +298,7 @@ const getAllMCAStudent = asyncHandler(async (req, res) => {
         cpi: 1,
         profileImage: 1,
         rank: 1,
+        isVerified: 1
         // team: 1
     }).sort({ rank: 1, fullName: 1 });
 
@@ -309,8 +310,49 @@ const getAllMCAStudent = asyncHandler(async (req, res) => {
         ));
 });
 
+const getAllMCAStudentReg = asyncHandler(async (req, res) => {
+    const MCAStudentData = await Student.find({ course: "MCA" }, {
+        registrationNumber: 1,
+        email: 1,
+        fullName: 1,
+        course: 1,
+        cpi: 1,
+        profileImage: 1,
+        rank: 1,
+        // team: 1
+    }).sort({ fullName: 1 });
+
+    return res.status(200)
+        .json(new ApiResponse(
+            200,
+            MCAStudentData,
+            "All MCA student data fetched successfully."
+        ));
+});
+
+const getAllMCAStudentVerify = asyncHandler(async (req, res) => {
+    const MCAStudentData = await Student.find({ course: "MCA" }, {
+        registrationNumber: 1,
+        email: 1,
+        fullName: 1,
+        course: 1,
+        cpi: 1,
+        profileImage: 1,
+        rank: 1,
+        isVerified: 1
+        // team: 1
+    }).sort({ isVerified: 1, fullName: 1 });
+
+    return res.status(200)
+        .json(new ApiResponse(
+            200,
+            MCAStudentData,
+            "All MCA student data fetched successfully."
+        ));
+});
+
 const getAllMTechStudent = asyncHandler(async (req, res) => {
-    console.log("Here");
+    // console.log("Here");
     
     const MTechStudentData = await Student
     .find({ course: "M.Tech." })
@@ -320,7 +362,51 @@ const getAllMTechStudent = asyncHandler(async (req, res) => {
         path: 'supervisor',
         select: 'fullName'
     });
-    console.log(MTechStudentData);
+    // console.log(MTechStudentData);
+    
+
+    return res.status(200)
+        .json(new ApiResponse(
+            200,
+            MTechStudentData,
+            "All MTech student data fetched successfully."
+        ));
+});
+
+const getAllMTechStudentReg = asyncHandler(async (req, res) => {
+    // console.log("Here");
+    
+    const MTechStudentData = await Student
+    .find({ course: "M.Tech." })
+    .select("-password -facultyPreferences -refreshToken")
+    .sort({ registrationNumber: 1 })
+    .populate({
+        path: 'supervisor',
+        select: 'fullName'
+    });
+    // console.log(MTechStudentData);
+    
+
+    return res.status(200)
+        .json(new ApiResponse(
+            200,
+            MTechStudentData,
+            "All MTech student data fetched successfully."
+        ));
+});
+
+const getAllMTechStudentVerify = asyncHandler(async (req, res) => {
+    // console.log("Here");
+    
+    const MTechStudentData = await Student
+    .find({ course: "M.Tech." })
+    .select("-password -facultyPreferences -refreshToken")
+    .sort({ isVerified: 1, registrationNumber: 1 })
+    .populate({
+        path: 'supervisor',
+        select: 'fullName'
+    });
+    // console.log(MTechStudentData);
     
 
     return res.status(200)
@@ -333,7 +419,7 @@ const getAllMTechStudent = asyncHandler(async (req, res) => {
 
 const getStudentProfile = asyncHandler(async (req, res) => {
     const registrationNumber = req.params.registrationNumber;
-    console.log(registrationNumber);
+    // console.log(registrationNumber);
     
     const student = await Student
         .findOne({ registrationNumber })
@@ -386,6 +472,10 @@ export {
     completeStudentProfile,
     submitPreferences,
     getAllMCAStudent,
+    getAllMCAStudentVerify,
+    getAllMCAStudentReg,
     getAllMTechStudent,
+    getAllMTechStudentVerify,
+    getAllMTechStudentReg,
     getStudentProfile
 }

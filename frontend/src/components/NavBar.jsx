@@ -48,13 +48,13 @@ const NavBar = () => {
           {user && (
             <Box display="flex" alignItems="center" ml={2}>
               <Avatar src={user.profileImage} alt={user.fullName} sx={{ width: 32, height: 32, mr: 1 }} />
-              <Typography variant="subtitle1">{user.name}</Typography>
+              <Typography variant="subtitle1">{user.fullName}</Typography>
             </Box>
           )}
         </Box>
 
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: "center" }}>
-          M.Tech. Student Details
+          MNNIT Allahabad
         </Typography>
 
         {user ? (

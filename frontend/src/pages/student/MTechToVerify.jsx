@@ -13,9 +13,9 @@ const MTechToVerify = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/common/allMTech');
+        const response = await axios.get('http://localhost:8000/api/v1/common/allMTechVerify');
         setStudents(response.data.data);
-        toast.success('Students loaded successfully!');
+        toast.success('success!');
       } catch (error) {
         console.error(error);
         toast.error('Failed to load students');
@@ -34,7 +34,7 @@ const MTechToVerify = () => {
   return (
     <Container sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        M.Tech Students
+        Verify M.Tech Students
       </Typography>
 
       {loading ? (
