@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   Container,
   Typography,
@@ -15,30 +15,30 @@ import {
   MenuItem,
   CircularProgress,
   Avatar,
-} from '@mui/material';
-import toast from 'react-hot-toast';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
-import { useAuth } from '../../redux/AuthContext';
+} from "@mui/material";
+import toast from "react-hot-toast";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { useAuth } from "../../redux/AuthContext";
 
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    identifier: '',
-    registrationNumber: '',
-    confirmPassword: '',
-    fullName: '',
-    course: '',
-    cpi: '',
+    email: "",
+    password: "",
+    identifier: "",
+    registrationNumber: "",
+    confirmPassword: "",
+    fullName: "",
+    course: "",
+    cpi: "",
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {setUser} = useAuth();
+  const { setUser } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,40 +52,65 @@ function AuthPage() {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
-  
-      setFormData(prevData => ({
+
+      setFormData((prevData) => ({
         ...prevData,
-        profileImage: file
+        profileImage: file,
       }));
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const { email, password, registrationNumber, confirmPassword, fullName, course, cpi, profileImage, identifier } = formData;
+
+    const {
+      email,
+      password,
+      registrationNumber,
+      confirmPassword,
+      fullName,
+      course,
+      cpi,
+      profileImage,
+      identifier,
+    } = formData;
     const trimmedEmail = email.trim();
     const trimmedReg = registrationNumber.trim();
     const trimmedIdentifier = identifier.trim();
-  
-    if ((isLogin && !trimmedIdentifier) || !password || (!isLogin && (!fullName || !course || !cpi))) {
+
+    if (
+      (isLogin && !trimmedIdentifier) ||
+      !password ||
+      (!isLogin && (!fullName || !course || !cpi))
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
-  
+
     if (!isLogin && password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
-  
+
+    if (!isLogin && !profileImage) {
+      toast.error("Please upload a profile image");
+      return;
+    }
+
     try {
       setLoading(true);
-  
+
       if (isLogin) {
-        const res = await axios.post("http://localhost:8000/api/v1/auth/login", { email: trimmedIdentifier, registrationNumber: trimmedIdentifier, password });
+        const res = await axios.post(
+          "http://localhost:8000/api/v1/auth/login",
+          {
+            email: trimmedIdentifier,
+            registrationNumber: trimmedIdentifier,
+            password,
+          }
+        );
         // console.log(res.data);
-        
+
         const cookies = new Cookies();
         cookies.remove("accessToken");
         cookies.remove("refreshToken");
@@ -94,7 +119,7 @@ function AuthPage() {
         setUser(res.data.data.user);
         toast.success("Login successful!");
         // console.log(res.data.data.user.course);
-        
+
         if (res.data.data.user.role === "Admin") {
           navigate("/admin/dashboard");
         } else if (res.data.data.user.role === "Faculty") {
@@ -114,19 +139,23 @@ function AuthPage() {
         }
       } else {
         const formData = new FormData();
-        formData.append('email', trimmedEmail);
-        formData.append('password', password);
-        formData.append('registrationNumber', trimmedReg);
-        formData.append('fullName', fullName);
-        formData.append('course', course);
-        formData.append('cpi', cpi);
-  
+        formData.append("email", trimmedEmail);
+        formData.append("password", password);
+        formData.append("registrationNumber", trimmedReg);
+        formData.append("fullName", fullName);
+        formData.append("course", course);
+        formData.append("cpi", cpi);
+
         // Append the actual file here
-        if (profileImage) formData.append('profileImage', profileImage);
-  
+        if (profileImage) formData.append("profileImage", profileImage);
+
         console.log(formData); // Check if the file is properly appended
-  
-        const res = await axios.post("http://localhost:8000/api/v1/student/register", formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+        const res = await axios.post(
+          "http://localhost:8000/api/v1/student/register",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
         toast.success("Registration successful! Please login.");
         setIsLogin(true);
       }
@@ -137,12 +166,13 @@ function AuthPage() {
       setLoading(false);
     }
   };
-  
 
   return (
     <Container maxWidth="sm">
       <Paper elevation={3} sx={{ padding: 4, mt: 8 }}>
-        <Typography variant="h5" gutterBottom>{isLogin ? 'Login' : 'Register'}</Typography>
+        <Typography variant="h5" gutterBottom>
+          {isLogin ? "Login" : "Register"}
+        </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
           {!isLogin && (
@@ -167,15 +197,15 @@ function AuthPage() {
                   <MenuItem value="MCA">MCA</MenuItem>
                 </Select>
               </FormControl>
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  label="Registration Number"
-                  name="registrationNumber"
-                  onChange={handleChange}
-                  value={formData.registrationNumber}
-                  required
-                />
+              <TextField
+                margin="normal"
+                fullWidth
+                label="Registration Number"
+                name="registrationNumber"
+                onChange={handleChange}
+                value={formData.registrationNumber}
+                required
+              />
               <TextField
                 margin="normal"
                 fullWidth
@@ -239,7 +269,12 @@ function AuthPage() {
             <Box mt={2} mb={2}>
               <Button variant="outlined" component="label" fullWidth>
                 Upload Profile Image
-                <input type="file" hidden onChange={handleImageChange} accept="image/*" />
+                <input
+                  type="file"
+                  hidden
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
               </Button>
               {imagePreview && (
                 <Box mt={2} display="flex" justifyContent="center">
@@ -256,12 +291,18 @@ function AuthPage() {
             sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : isLogin ? 'Login' : 'Register'}
+            {loading ? (
+              <CircularProgress size={24} />
+            ) : isLogin ? (
+              "Login"
+            ) : (
+              "Register"
+            )}
           </Button>
 
           <Box mt={2}>
             <Typography variant="body2">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
+              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
               <Link
                 component="button"
                 onClick={(e) => {
@@ -269,7 +310,7 @@ function AuthPage() {
                   setIsLogin(!isLogin);
                 }}
               >
-                {isLogin ? 'Register' : 'Login'}
+                {isLogin ? "Register" : "Login"}
               </Link>
             </Typography>
           </Box>
