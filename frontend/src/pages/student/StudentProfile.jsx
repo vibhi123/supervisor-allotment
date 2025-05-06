@@ -157,6 +157,8 @@ const StudentProfilePage = () => {
               </>
             ) : student.course === "MCA" ? (
               <>
+                  {student.team ? (
+                    <>
                 <Typography
                   variant="h5"
                   gutterBottom
@@ -166,8 +168,8 @@ const StudentProfilePage = () => {
                 >
                   Team {student.team.teamNumber}
                 </Typography>
-                {student.team ? (
                   <TeamCard team={student.team} />
+                  </>
                 ) : (
                   <Typography>No team assigned</Typography>
                 )}
