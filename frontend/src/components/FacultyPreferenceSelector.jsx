@@ -42,6 +42,9 @@ const FacultyPreferenceSelector = ({ faculties, onSubmit }) => {
                       variant="outlined"
                     >
                       <CardContent>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          Preference {index + 1}
+                        </Typography>
                         <Typography variant="subtitle1">{faculty.fullName}</Typography>
                         <Typography variant="body2">{faculty.designation}</Typography>
                         <Typography variant="body2">Interest: {faculty.interest}</Typography>
