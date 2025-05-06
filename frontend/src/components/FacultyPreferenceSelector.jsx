@@ -1,13 +1,11 @@
 // FacultyPreferenceSelector.js
-import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import {
-  Card, CardContent, Typography, Button, Stack
-} from '@mui/material';
+import React, { useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Card, CardContent, Typography, Button, Stack } from "@mui/material";
 
 const FacultyPreferenceSelector = ({ faculties, onSubmit }) => {
   // console.log(faculties);
-  
+
   const [facultyList, setFacultyList] = useState(faculties.data);
 
   const handleDragEnd = (result) => {
@@ -27,13 +25,23 @@ const FacultyPreferenceSelector = ({ faculties, onSubmit }) => {
 
   return (
     <div>
-      <Typography variant="h5" gutterBottom>Reorder Faculty Preferences</Typography>
+      <Typography variant="h5" gutterBottom>
+        Reorder Faculty Preferences
+      </Typography>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="facultyList">
           {(provided) => (
-            <Stack spacing={2} {...provided.droppableProps} ref={provided.innerRef}>
+            <Stack
+              spacing={2}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
               {facultyList.map((faculty, index) => (
-                <Draggable key={faculty._id} draggableId={faculty._id} index={index}>
+                <Draggable
+                  key={faculty._id}
+                  draggableId={faculty._id}
+                  index={index}
+                >
                   {(provided) => (
                     <Card
                       ref={provided.innerRef}
@@ -42,9 +50,6 @@ const FacultyPreferenceSelector = ({ faculties, onSubmit }) => {
                       variant="outlined"
                     >
                       <CardContent>
-                        <Typography variant="subtitle2" color="text.secondary">
-                          Preference {index + 1}
-                        </Typography>
                         <Typography variant="subtitle1">{faculty.fullName}</Typography>
                         <Typography variant="body2">{faculty.designation}</Typography>
                         <Typography variant="body2">Interest: {faculty.interest}</Typography>
