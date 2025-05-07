@@ -119,36 +119,45 @@ const AllFacultyPage = () => {
                 </Grid>
 
                 <Grid size={6} item xs={12} md={6}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    sx={{
-                      cursor: "pointer",
-                      width: "fit-content",
-                      "&:hover": { textDecoration: "underline", color: "secondary.main" },
-                    }}
-                    onClick={() => navigate(`/admin/team-mca/${faculty.team.teamNumber}`)}
-                    gutterBottom
-                  >
-                    MCA Team #{faculty.team.teamNumber}
-                  </Typography>
-
-                  <Box display="flex" flexDirection="column" gap={1}>
-                    {faculty.team.members.map((member) => (
+                  {faculty.team ? (
+                    <>
                       <Typography
-                        key={member._id}
-                        variant="body2"
+                        variant="subtitle1"
+                        fontWeight="bold"
                         sx={{
                           cursor: "pointer",
-                          "&:hover": { textDecoration: "underline", color: "primary.main" },
+                          width: "fit-content",
+                          "&:hover": { textDecoration: "underline", color: "secondary.main" },
                         }}
-                        onClick={() => navigate(`/student/${member.registrationNumber}`)}
+                        onClick={() => navigate(`/admin/team-mca/${faculty.team.teamNumber}`)}
+                        gutterBottom
                       >
-                        {member.fullName} ({member.registrationNumber})
+                        MCA Team #{faculty.team.teamNumber}
                       </Typography>
-                    ))}
-                  </Box>
+
+                      <Box display="flex" flexDirection="column" gap={1}>
+                        {faculty.team.members.map((member) => (
+                          <Typography
+                            key={member._id}
+                            variant="body2"
+                            sx={{
+                              cursor: "pointer",
+                              "&:hover": { textDecoration: "underline", color: "primary.main" },
+                            }}
+                            onClick={() => navigate(`/student/${member.registrationNumber}`)}
+                          >
+                            {member.fullName} ({member.registrationNumber})
+                          </Typography>
+                        ))}
+                      </Box>
+                    </>
+                  ) : (
+                    <Typography variant="subtitle1" color="text.secondary">
+                      No team assigned
+                    </Typography>
+                  )}
                 </Grid>
+
               </Grid>
             </Paper>
           </Grid>

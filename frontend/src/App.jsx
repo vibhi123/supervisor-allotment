@@ -24,6 +24,7 @@ import AddStudent from './pages/admin/AddStudent';
 import AddFaculty from './pages/admin/AddFaculty';
 import AddAdmin from './pages/admin/AddAdmin';
 import EditFacultyDetails from './pages/faculty/EditFacultyDetails';
+import AllotmentMTech from './pages/faculty/AllotmentMTech';
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
         <Route path="/faculty-all" element={ <AllFaculty /> } />
         <Route path="/mca-all" element={ <MCAAllStudent /> } />
         <Route path="/allotment-mca" element={ <AllotmentMCA /> } />
+        <Route path="/allotment-mtech" element={ <AllotmentMTech /> } />
         <Route path="/mca-allotment" element={ <MCAAllotment /> } />
         <Route path="/mca-ranklist" element={ <MCARanklist /> } />
         <Route path="/mtech-allotment" element={ <MTechAllotment /> } />

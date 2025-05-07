@@ -245,7 +245,6 @@ const generateRankMTech = asyncHandler(async (req, res) => {
     });
     // console.log(MTechStudents);
 
-    // Assign ranks
     for (let i = 0; i < MTechStudents.length; i++) {
         MTechStudents[i].rank = i + 1;
         await MTechStudents[i].save();
@@ -268,7 +267,12 @@ const generateRankMTech = asyncHandler(async (req, res) => {
 })
 
 const allotFacultyMTech = asyncHandler(async (req, res) => {
-    preAllotFaculty();
+    console.log("start");
+    
+    await preAllotFaculty();
+
+    console.log("Mid");
+    
 
     const faculties = await Faculty.find({}, { student: 1, numberOfStudent: 1 });
     const facultyMap = new Map();
@@ -316,6 +320,83 @@ const allotFacultyMTech = asyncHandler(async (req, res) => {
             )
         )
 })
+
+const resetMTech = asyncHandler(async (req, res) => {
+    console.log("Start");
+    
+    const MTechStudents = await Student.find({ course: "M.Tech." }, { rank: 1, supervisor: 1 });
+
+    for (let student of MTechStudents) {
+        student.rank = 0;
+        student.supervisor = [];
+        await student.save();
+    }
+
+    const faculties = await Faculty.find({}, { student: 1, numberOfStudent: 1 });
+
+    for (let faculty of faculties) {
+        faculty.student = [];
+        await faculty.save();
+    }
+
+    console.log("Mid");
+    
+
+    const admin = await Admin.findById(req.user?._id);
+    admin.MTechRankGenerated = false;
+    admin.MTechFacultyAllotted = false;
+    await admin.save();
+
+    console.log("Done");
+    
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "M.Tech. reset successful"
+        )
+    );
+});
+
+const resetMCA = asyncHandler(async (req, res) => {
+    const MCAStudents = await Student.find({ course: "MCA" }, { rank: 1, team: 1 });
+
+    for (let student of MCAStudents) {
+        student.rank = 0;
+        student.team = null;
+        await student.save();
+    }
+
+    const faculties = await Faculty.find({}, { student: 1, numberOfStudent: 1 });
+
+    for (let faculty of faculties) {
+        faculty.team = null;
+        await faculty.save();
+    }
+
+    const teams = await Team.find({}, { members: 1, supervisor: 1 });
+
+    for (let team of teams) {
+        team.members = [];
+        team.supervisor = null;
+        await team.save();
+    }
+
+    const admin = await Admin.findById(req.user?._id);
+    admin.MCARankGenerated = false;
+    admin.MCATeamsCreated = false;
+    admin.MCAFacultyAllotted = false;
+    await admin.save();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "MCA reset successful"
+        )
+    );
+});
 
 const getStudentProfile = asyncHandler(async (req, res) => {
     const registrationNumber = req.params.registrationNumber;
@@ -772,7 +853,9 @@ export {
     addStudent,
     addFaculty,
     addAdmin,
-    updateFacultyDetails
+    updateFacultyDetails,
+    resetMCA,
+    resetMTech
     // getUserChannelProfile,
     // getWatchHistory
 }

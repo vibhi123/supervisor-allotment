@@ -14,6 +14,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     const cookies = new Cookies();
     try {
+      navigate("/");
       await axios.post(
         "http://localhost:8000/api/v1/auth/logout",
         {},
@@ -22,7 +23,6 @@ const NavBar = () => {
       cookies.remove("accessToken");
       cookies.remove("refreshToken");
       setUser(null);
-      navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
     }

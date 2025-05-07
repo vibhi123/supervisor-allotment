@@ -16,8 +16,8 @@ const TeamCard = ({ team }) => {
         justifyContent: 'center',
       }}
     >
-      <Typography variant="h7" gutterBottom>
-        Faculty : {team.supervisor.fullName}
+      <Typography variant="body1" gutterBottom>
+        Faculty: {team?.supervisor?.fullName || "No faculty assigned"}
       </Typography>
       <Typography variant="h8" gutterBottom>
         Team Members
@@ -41,7 +41,7 @@ const TeamCard = ({ team }) => {
               },
             }}
           >
-            <ListItemButton component={Link} to={`/student/${member.registrationNumber}`}> 
+            <ListItemButton component={Link} to={`/student/${member.registrationNumber}`}>
               <ListItemText
                 primary={member.fullName}
                 secondary={`Reg No: ${member.registrationNumber}`}
