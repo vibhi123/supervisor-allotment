@@ -321,6 +321,107 @@ const allotFacultyMTech = asyncHandler(async (req, res) => {
         )
 })
 
+// using deferred acceptance algo.
+const allotFacultyMTechDA = asyncHandler(async (req, res) => {
+    const faculties = await Faculty.find({}, { numberOfStudent: 1 });
+    const students = await Student.find(
+        { course: "M.Tech.", supervisor: [] },
+        { facultyPreferences: 1, rank: 1 }
+    );
+
+    const facultyMap = new Map();
+    faculties.forEach(f => {
+        facultyMap.set(f._id.toString(), {
+            capacity: f.numberOfStudent,
+            proposals: [],
+        });
+    });
+
+    const studentMap = new Map();
+    students.forEach(s => {
+        studentMap.set(s._id.toString(), {
+            preferences: s.facultyPreferences.map(p => p.toString()),
+            rank: s.rank,
+        });
+    });
+
+    
+    let unassignedStudents = Array.from(studentMap.keys());
+    const studentNextProposalIndex = new Map(
+        unassignedStudents.map(id => [id, 0])
+    );
+
+    while (unassignedStudents.length > 0) {
+        const studentsToPropose = [...unassignedStudents];
+        unassignedStudents = [];
+
+        
+        for (const studentId of studentsToPropose) {
+            const student = studentMap.get(studentId);
+            const proposalIndex = studentNextProposalIndex.get(studentId);
+
+            if (proposalIndex >= student.preferences.length) {
+                continue;
+            }
+
+            const facultyId = student.preferences[proposalIndex];
+            const faculty = facultyMap.get(facultyId);
+
+            if (faculty) {
+                faculty.proposals.push(studentId);
+            }
+            
+            studentNextProposalIndex.set(studentId, proposalIndex + 1);
+        }
+
+        for (const [facultyId, faculty] of facultyMap.entries()) {
+            if (faculty.proposals.length <= faculty.capacity) {
+                continue;
+            }
+
+            faculty.proposals.sort((a, b) => studentMap.get(a).rank - studentMap.get(b).rank);
+
+            const accepted = faculty.proposals.slice(0, faculty.capacity);
+            const rejected = faculty.proposals.slice(faculty.capacity);
+
+            faculty.proposals = accepted;
+            unassignedStudents.push(...rejected);
+        }
+    }
+
+    const promises = [];
+
+    for (const [facultyId, facultyData] of facultyMap.entries()) {
+        const studentIds = facultyData.proposals;
+        
+        promises.push(
+            Faculty.findByIdAndUpdate(facultyId, { $set: { student: studentIds } })
+        );
+
+        for (const studentId of studentIds) {
+            promises.push(
+                Student.findByIdAndUpdate(studentId, { $set: { supervisor: [facultyId] } })
+            );
+        }
+    }
+
+    const admin = await Admin.findById(req.user?._id);
+    if (admin) {
+        admin.MTechFacultyAllotted = true;
+        promises.push(admin.save());
+    }
+
+    await Promise.all(promises);
+
+    console.log('allotment completed using Deferred Acceptance algo');
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {}, "Supervisor Allotment Completed for M.Tech. Students")
+        );
+});
+
 const resetMTech = asyncHandler(async (req, res) => {
     console.log("Start");
     
@@ -842,6 +943,7 @@ export {
     generateRankMCA,
     generateRankMTech,
     allotFacultyMTech,
+    allotFacultyMTechDA,
     getStudentProfile,
     verifyStudent,
     createTeamsMCA,
@@ -856,6 +958,4 @@ export {
     updateFacultyDetails,
     resetMCA,
     resetMTech
-    // getUserChannelProfile,
-    // getWatchHistory
 }

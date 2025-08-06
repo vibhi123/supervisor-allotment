@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addAdmin, addFaculty, addStudent, allotFacultyMCA, allotFacultyMTech, changeCurrentPassword, createTeamsMCA, generateRankMCA, generateRankMTech, getAllFaculty, getAllMCATeams, getCurrentAdmin, getFaculty, getMCATeam, getStudentProfile, loginAdmin, logoutAdmin, refreshAccessToken, registerAdmin, resetMCA, resetMTech, updateFacultyDetails, verifyStudent } from "../controllers/admin.controller.js";
+import { addAdmin, addFaculty, addStudent, allotFacultyMCA, allotFacultyMTech, allotFacultyMTechDA, changeCurrentPassword, createTeamsMCA, generateRankMCA, generateRankMTech, getAllFaculty, getAllMCATeams, getCurrentAdmin, getFaculty, getMCATeam, getStudentProfile, loginAdmin, logoutAdmin, refreshAccessToken, registerAdmin, resetMCA, resetMTech, updateFacultyDetails, verifyStudent } from "../controllers/admin.controller.js";
 import { verifyAdminJWT } from "../middlewares/auth.admin.middleware.js";
 
 const router = Router()
@@ -18,7 +18,8 @@ router.route("/verify/:registrationNumber").put(verifyAdminJWT, verifyStudent)
 router.route("/generate-rank-MCA").get(verifyAdminJWT, generateRankMCA)
 router.route("/create-teams-MCA").get(verifyAdminJWT, createTeamsMCA)
 router.route("/generate-rank-MTech").get(verifyAdminJWT, generateRankMTech)
-router.route("/allot-faculty-MTech").get(verifyAdminJWT, allotFacultyMTech)
+// router.route("/allot-faculty-MTech").get(verifyAdminJWT, allotFacultyMTech)
+router.route("/allot-faculty-MTech").get(verifyAdminJWT, allotFacultyMTechDA)
 router.route("/allot-faculty-MCA").get(verifyAdminJWT, allotFacultyMCA)
 router.route("/reset-mca").post(verifyAdminJWT, resetMCA);
 router.route("/reset-mtech").post(verifyAdminJWT, resetMTech);
